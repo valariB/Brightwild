@@ -12,17 +12,220 @@
       text-align: center;
     }
 
+    .intro {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      margin-top: 50px;
+    }
+
+    .intro img {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      box-shadow: 0 0 12px rgba(0,0,0,0.05);
+    }
+
     .quote {
       font-size: 26px;
       font-weight: 600;
       color: #222;
-      margin-bottom: 30px;
+    }
+
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .menu button {
+      padding: 10px 18px;
+      background-color: #007acc;
+      color: white;
+      font-size: 15px;
+      font-weight: 500;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: background-color 0.2s ease;
+    }
+
+    .menu button:hover {
+      background-color: #005fa3;
+    }
+
+    .section {
+      background-color: #fff;
+      padding: 15px;
+      border-left: 6px solid #007acc;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: none;
+      text-align: left;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+
+    input[type="number"], input[type="text"] {
+      padding: 5px;
+      width: 160px;
+    }
+
+    button.calc {
+      margin-top: 10px;
+      padding: 8px 16px;
+      background-color: #007acc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    th, td {
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+
+    th {
+      background-color: #eef3f7;
     }
   </style>
 </head>
 <body>
 
-  <div class="quote">Dominate the day Brightwilders</div>
+  <div id="intro" class="intro">
+    <img src="Brightwild_Workable_1200x1200.png" alt="Brightwild Logo">
+    <div class="quote">Dominate the day Accounting Team</div>
+    <div class="menu" id="menuBar">
+      <button onclick="window.open('https://valarib.github.io/Wex/Wex.html', '_self')">Wex</button>
+      <button onclick="loadDialpad()">Dialpad</button>
+      <button onclick="showSection('bkw', this)">BKW Utility</button>
+      <button onclick="window.open('https://valarib.github.io/ACTG-GL-Reference-Tool/ACTG-GL.HTML', '_blank')">
+        GL Reference Tool
+      </button>
+    </div>
+  </div>
+
+  <div id="dialpad-embed" class="section">
+    <iframe src="https://valarib.github.io/DIALPAD/DialPad.html" style="width:100%; height:800px; border:none;"></iframe>
+  </div>
+
+  <div id="bkw" class="section">
+    <button class="calc" onclick="returnHome()" style="margin-bottom: 20px;">Return to Home</button>
+    <h2>BKW Utility Allocation</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Invoice Item</th>
+          <th>GL</th>
+          <th>Amount</th>
+          <th>Department</th>
+          <th>Class</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Electric</td><td>7901</td><td><input type="number" id="elec" value="2750"></td><td>Laundry</td><td>BLDG 7</td></tr>
+        <tr><td>Propane</td><td>7905</td><td><input type="number" id="propane" value="5500"></td><td>Laundry</td><td>BLDG 7</td></tr>
+        <tr><td>Waste Removal</td><td>7906</td><td><input type="number" id="waste" value="1682"></td><td>Laundry</td><td>BLDG 7</td></tr>
+        <tr><td>Water</td><td>7902</td><td><input type="number" id="water" value="4500"></td><td>Laundry</td><td>BLDG 7</td></tr>
+        <tr><td>Sewer</td><td>7902</td><td><input type="number" id="sewer" value="6000"></td><td>Laundry</td><td>BLDG 7</td></tr>
+      </tbody>
+    </table>
+    <button class="calc" onclick="calculateBKW()">Calculate Utility Allocation</button>
+    <div id="bkw-result"></div>
+  </div>
+
+  <script>
+    function showSection(id, btn) {
+      document.getElementById('intro').style.display = 'none';
+      document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+      document.querySelectorAll('.menu button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function returnHome() {
+      document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
+      document.getElementById('intro').style.display = 'flex';
+    }
+
+    function formatNumber(num) {
+      return num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function loadDialpad() {
+      document.getElementById('intro').style.display = 'none';
+      document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
+      document.getElementById('dialpad-embed').style.display = 'block';
+    }
+
+    function calculateBKW() {
+      const items = [
+        { label: "Electric", gl: "7901", amount: parseFloat(document.getElementById("elec").value) || 0, dept: "Laundry", class: "BLDG 7" },
+        { label: "Propane", gl: "7905", amount: parseFloat(document.getElementById("propane").value) || 0, dept: "Laundry", class: "BLDG 7" },
+        { label: "Waste Removal", gl: "7906", amount: parseFloat(document.getElementById("waste").value) || 0, dept: "Laundry", class: "BLDG 7" },
+        { label: "Water", gl: "7902", amount: parseFloat(document.getElementById("water").value) || 0, dept: "Laundry", class: "BLDG 7" },
+        { label: "Sewer", gl: "7902", amount: parseFloat(document.getElementById("sewer").value) || 0, dept: "Laundry", class: "BLDG 7" }
+      ];
+
+      let fullTable = `
+        <h3>Detailed Allocation</h3>
+        <table>
+          <thead>
+            <tr><th>Invoice Item</th><th>GL</th><th>Amount</th><th>Department</th><th>Class</th></tr>
+          </thead>
+          <tbody>
+            ${items.map(i => `
+              <tr>
+                <td>${i.label}</td>
+                <td>${i.gl}</td>
+                <td>$${formatNumber(i.amount)}</td>
+                <td>${i.dept}</td>
+                <td>${i.class}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>`;
+
+      const glSummary = {};
+      items.forEach(i => {
+        if (!glSummary[i.gl]) {
+          glSummary[i.gl] = 0;
+        }
+        glSummary[i.gl] += i.amount;
+      });
+
+      let summaryTable = `
+        <h3 style="margin-top:30px;">Summary by GL Account</h3>
+        <table>
+          <thead><tr><th>GL</th><th>Total Amount</th></tr></thead>
+          <tbody>
+            ${Object.entries(glSummary).map(([gl, amt]) => `
+              <tr>
+                <td>${gl}</td>
+                <td>$${formatNumber(amt)}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>`;
+
+      document.getElementById("bkw-result").innerHTML = fullTable + summaryTable;
+    }
+  </script>
 
 </body>
 </html>
