@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GL Split & Format Tool</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f7fa;
+      margin: 0;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .quote {
+      font-size: 26px;
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="quote">Dominate the day Brightwilders</div>
+
+</body>
+</html>
