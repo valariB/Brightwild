@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Coding Reference</title>
+  <title>Coding Referance Tool</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -12,17 +12,63 @@
       text-align: center;
     }
 
+    .intro {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      margin-top: 50px;
+    }
+
+    .intro img {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      box-shadow: 0 0 12px rgba(0,0,0,0.05);
+    }
+
     .quote {
       font-size: 26px;
       font-weight: 600;
       color: #222;
       margin-bottom: 30px;
     }
+
+    #current-date {
+      font-size: 18px;
+      color: #333;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
 
-  <div class="quote">Dominate the day - Brightwilders</div>
+  <div class="intro">
+    <img src="Brightwild_Workable_1200x1200.png" alt="Brightwild Logo">
+    <div class="quote">Dominate the day - Brightwilders</div>
+  </div>
+
+  <div id="current-date"></div>
+
+  <script>
+    function updateDateTime() {
+      const now = new Date();
+      const options = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      };
+      document.getElementById("current-date").textContent =
+        `Today is ${now.toLocaleDateString(undefined, options)}`;
+    }
+
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+  </script>
 
 </body>
 </html>
